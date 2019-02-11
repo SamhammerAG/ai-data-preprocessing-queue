@@ -1,6 +1,6 @@
 import unittest
 
-from data_preprocessing_queue.Pipeline import Pipeline
+from ai_data_preprocessing_queue.Pipeline import Pipeline
 
 
 class PipelineTest(unittest.TestCase):
