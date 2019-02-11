@@ -1,4 +1,3 @@
-from . import *
 from os.path import dirname, basename, isfile
 from glob import glob
 
