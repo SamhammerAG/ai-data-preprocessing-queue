@@ -12,5 +12,5 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/SamhammerAG/ai-data-preprocessing-queue",
     packages=find_packages(exclude=["test_data"]),
-    install_requires=[]
+    install_requires=['langdetect==1.0.7', 'nltk==3.4']
 )
