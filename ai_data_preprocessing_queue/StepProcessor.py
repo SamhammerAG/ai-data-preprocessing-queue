@@ -11,5 +11,5 @@ class StepProcessor:
 
         assert self.module.step is not None
 
-    def run(self, item, globalState=None):
-        return self.module.step(item, globalState)
+    def run(self, item, itemState, globalState=None):
+        return self.module.step(item, itemState, globalState)

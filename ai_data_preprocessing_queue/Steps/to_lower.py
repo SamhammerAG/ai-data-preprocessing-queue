@@ -1,3 +1,3 @@
 
-def step(item, globalState):
+def step(item, itemState, globalState):
     return item.lower()
