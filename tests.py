@@ -1,7 +1,8 @@
 import unittest
 
 from ai_data_preprocessing_queue.Pipeline import Pipeline
-
+from ai_data_preprocessing_queue.Steps.number_interpretation_preprocessor.german_phonenumber_replacer import GermanPhonenumberReplacer
+import re
 
 class PipelineTest(unittest.TestCase):
 
@@ -36,13 +37,21 @@ class PipelineTest(unittest.TestCase):
         value = pipeline.consume("1.1.2019 20.2.2003 1.1.20 01.01.20 1.1.1900")
         self.assertEqual(value, 'replaceddate replaceddate replaceddate replaceddate replaceddate')
         # iban
-        value = pipeline.consume("DE12500101170648489890")
-        self.assertEqual(value, 'replacediban')
+        value = pipeline.consume("test DE12500101170648489890")
+        self.assertEqual(value, 'test replacediban')
         # postcode
-        value = pipeline.consume("92637")
-        self.assertEqual(value, 'replacedpostcode')
-        
-        
+        value = pipeline.consume("test 92637 92709 test")
+        self.assertEqual(value, 'test replacedpostcode replacedpostcode test')
+        # german phone
+        value = pipeline.consume("test 0961123456 test")
+        self.assertEqual(value, 'test replacedgermanphonenumber test')
+        value = pipeline.consume("test (0961)123456 test")
+        self.assertEqual(value, 'test replacedgermanphonenumber test')
+        value = pipeline.consume("test +49(0)121-79536-77 test")
+        self.assertEqual(value, 'test replacedgermanphonenumber test')
+        # german handy
+        value = pipeline.consume("test 015125391111 test")
+        self.assertEqual(value, 'test replacedgermanphonenumber test')
 
 if __name__ == '__main__':
     unittest.main()
