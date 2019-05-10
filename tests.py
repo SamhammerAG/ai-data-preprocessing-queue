@@ -32,8 +32,13 @@ class PipelineTest(unittest.TestCase):
 
     def test_number_interpretation(self):
         pipeline = Pipeline(["number_interpretation"])
+        # date
         value = pipeline.consume("1.1.2019 20.2.2003 1.1.20 01.01.20 1.1.1900")
         self.assertEqual(value, 'replaceddate replaceddate replaceddate replaceddate replaceddate')
+        # iban
+        value = pipeline.consume("DE12500101170648489890")
+        self.assertEqual(value, 'replacediban')
+        
 
 if __name__ == '__main__':
     unittest.main()
