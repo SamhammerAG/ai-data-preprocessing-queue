@@ -38,6 +38,10 @@ class PipelineTest(unittest.TestCase):
         # iban
         value = pipeline.consume("DE12500101170648489890")
         self.assertEqual(value, 'replacediban')
+        # postcode
+        value = pipeline.consume("92637")
+        self.assertEqual(value, 'replacedpostcode')
+        
         
 
 if __name__ == '__main__':
