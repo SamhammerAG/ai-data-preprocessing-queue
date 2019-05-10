@@ -30,5 +30,10 @@ class PipelineTest(unittest.TestCase):
         value = pipeline.consume('123 CamelCase')
         self.assertEqual(value, '    camelcase')
 
+    def test_number_interpretation(self):
+        pipeline = Pipeline(["number_interpretation"])
+        value = pipeline.consume("1.1.2019 20.2.2003 1.1.20 01.01.20 1.1.1900")
+        self.assertEqual(value, 'replaceddate replaceddate replaceddate replaceddate replaceddate')
+
 if __name__ == '__main__':
     unittest.main()
