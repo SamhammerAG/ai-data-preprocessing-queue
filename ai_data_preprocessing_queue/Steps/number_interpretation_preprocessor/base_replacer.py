@@ -18,5 +18,5 @@ class BaseReplacer(ABC):
     def replace(self: 'BaseReplacer', text: str) -> str:
         for p in self.regex():
             pattern = re.compile(p)
-            text = pattern.sub(self.token(), text)
+            text = pattern.sub(' ' + self.token() + ' ', text)
         return text

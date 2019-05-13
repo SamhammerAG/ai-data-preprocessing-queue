@@ -34,24 +34,24 @@ class PipelineTest(unittest.TestCase):
     def test_number_interpretation(self):
         pipeline = Pipeline(["number_interpretation"])
         # date
-        value = pipeline.consume("1.1.2019 20.2.2003 1.1.20 01.01.20 1.1.1900")
-        self.assertEqual(value, 'replaceddate replaceddate replaceddate replaceddate replaceddate')
+        value = pipeline.consume("test 1.1.2019 20.2.2003 1.1.20 01.01.20 1.1.1900 1.1. 01.01. test")
+        self.assertEqual(value, 'test  replaceddate   replaceddate   replaceddate  replaceddate replaceddate   replaceddate  replaceddate test')
         # iban
         value = pipeline.consume("test DE12500101170648489890")
-        self.assertEqual(value, 'test replacediban')
+        self.assertEqual(value, 'test  replacediban ')
         # postcode
         value = pipeline.consume("test 92637 92709 test")
-        self.assertEqual(value, 'test replacedpostcode replacedpostcode test')
+        self.assertEqual(value, 'test  replacedpostcode   replacedpostcode  test')
         # german phone
         value = pipeline.consume("test 0961123456 test")
-        self.assertEqual(value, 'test replacedgermanphonenumber test')
+        self.assertEqual(value, 'test  replacedgermanphonenumber  test')
         value = pipeline.consume("test (0961)123456 test")
-        self.assertEqual(value, 'test replacedgermanphonenumber test')
+        self.assertEqual(value, 'test  replacedgermanphonenumber  test')
         value = pipeline.consume("test +49(0)121-79536-77 test")
-        self.assertEqual(value, 'test replacedgermanphonenumber test')
+        self.assertEqual(value, 'test  replacedgermanphonenumber  test')
         # german handy
         value = pipeline.consume("test 015125391111 test")
-        self.assertEqual(value, 'test replacedgermanphonenumber test')
+        self.assertEqual(value, 'test  replacedgermanphonenumber  test')
 
 if __name__ == '__main__':
     unittest.main()
