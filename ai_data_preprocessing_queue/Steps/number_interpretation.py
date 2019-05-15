@@ -4,22 +4,20 @@ from pathlib import Path
 from .number_interpretation_preprocessor import BaseReplacer
 from os.path import dirname
 from typing import List
+import pandas
 
 def step(item, itemState, globalState):
-    """replace numbers with tokens"""
+    csv = pandas.read_csv(dirname(__file__)+"/../data/number_interpretation.csv", header=None, usecols=[0,1,2], quotechar='"')
+    csv[0] = csv[0].str.strip()
+    csv[1] = csv[1].str.strip()
+    csv[2] = pandas.to_numeric(csv[2])
+    csv["sort"] = csv[2]
 
-    # read all classes of type BaseReplacer
-    replacerNames: List[str] = [Path(f).parts[-1].replace(".py", "") 
-        for f in glob.glob(dirname(__file__)+"/number_interpretation_preprocessor/*.py")
-        if f.find("__init__") == -1 and f.find("base_replacer") == -1]
-    
-    fn = lambda n: __import__('ai_data_preprocessing_queue.Steps.number_interpretation_preprocessor', fromlist=[n])
-    sort = lambda o: o.order()
-    
-    instances: List[BaseReplacer] = [getattr(fn(f), f.title().replace("_", ""))() for f in replacerNames]
-    instances.sort(key = sort)
+    # sort
+    csv = csv.sort_values("sort", inplace=False).drop("sort", "columns")
 
-    for i in instances:
-        item = i.replace(item)
+    for _, row in csv.iterrows():
+        pattern = re.compile(row[0])
+        item = pattern.sub(' ' + row[1] + ' ', item)
 
     return item
