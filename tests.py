@@ -53,5 +53,10 @@ class PipelineTest(unittest.TestCase):
         value = pipeline.consume("test 015125391111 test")
         self.assertEqual(value, 'test  replacedgermanphonenumber  test')
 
+    def test_token_replacement(self):
+        pipeline = Pipeline(["token_replacement"])
+        value = pipeline.consume("test asd bla 1212", { "tokenDir": "." })
+        self.assertEqual(value, 'test www blub 1212')
+
 if __name__ == '__main__':
     unittest.main()

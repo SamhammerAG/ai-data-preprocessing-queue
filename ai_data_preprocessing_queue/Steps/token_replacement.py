@@ -2,6 +2,7 @@ import glob
 from typing import List
 from io import TextIOWrapper
 import numpy
+import re
 
 # TODO: can this be cached? what about users environments etc
 lines: List[List[str]] = []
@@ -17,7 +18,7 @@ def step(item: str, itemState: dict, globalState: dict) -> str:
 
         if (header[0] != "abbreviation" or header[1] != "full" or header[2] != "sort"):
             handler.close()
-            raise Exception("header does not match, maybe your file is not the right one")
+            raise Exception("file: '" + file + "' -> header does not match, maybe your file is not the right one")
         
         lines = [[s.strip() for s in l.split(",")] for l in handler.readlines()]
         
@@ -30,8 +31,9 @@ def step(item: str, itemState: dict, globalState: dict) -> str:
 
         # sort
         sortFn = lambda i: 0 - i[2]
-        sortedList = sorted(lines, key = sortFn)
+        lines = sorted(lines, key = sortFn)
 
-        print(sortedList)
+    for l in lines:
+        item = item.replace(l[0], l[1])
 
     return item
