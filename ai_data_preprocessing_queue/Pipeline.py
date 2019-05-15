@@ -1,12 +1,12 @@
 from .StepProcessor import StepProcessor
-
+from typing import Dict
 
 class Pipeline():
 
-    def __init__(self, step_names):
+    def __init__(self, step_names, preprocessorData: Dict[str, str] = {}):
         self.step_processors = []
         for step_name in list(filter(None, step_names)):
-            processor = StepProcessor(step_name)
+            processor = StepProcessor(step_name, preprocessorData.get(step_name))
             self.step_processors.append(processor)
 
     def consume(self, text, globalState=None):

@@ -1,12 +1,11 @@
 import re
 import glob
 from pathlib import Path
-from .number_interpretation_preprocessor import BaseReplacer
 from os.path import dirname
 from typing import List
 import pandas
 
-def step(item, itemState, globalState):
+def step(item, itemState, globalState, preprocessorData: str):
     csv = pandas.read_csv(dirname(__file__)+"/../data/number_interpretation.csv", header=None, usecols=[0,1,2], quotechar='"')
     csv[0] = csv[0].str.strip()
     csv[1] = csv[1].str.strip()

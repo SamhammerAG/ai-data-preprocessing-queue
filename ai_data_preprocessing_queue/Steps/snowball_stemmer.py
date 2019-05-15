@@ -11,7 +11,7 @@ langMapping = {
     }
 
 
-def step(item, itemState, globalState):
+def step(item, itemState, globalState, preprocessorData: str):
 
     stemmer = langMapping.get(
         itemState['language'],

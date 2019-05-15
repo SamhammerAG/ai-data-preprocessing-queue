@@ -10,6 +10,6 @@ zh-cn, zh-tw
 '''
 
 
-def step(item, itemState, globalState):
+def step(item, itemState, globalState, preprocessorData: str):
     itemState['language'] = detect(item[:100])
     return item

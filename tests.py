@@ -1,7 +1,6 @@
 import unittest
 
 from ai_data_preprocessing_queue.Pipeline import Pipeline
-from ai_data_preprocessing_queue.Steps.number_interpretation_preprocessor.german_phonenumber_replacer import GermanPhonenumberReplacer
 import re
 
 class PipelineTest(unittest.TestCase):
@@ -54,7 +53,8 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual(value, 'test  replacedgermanphonenumber  test')
 
     def test_token_replacement(self):
-        pipeline = Pipeline(["token_replacement"])
+        handler = open("./token_replacement_testdata.csv", "r")
+        pipeline = Pipeline(["token_replacement"], { "token_replacement": handler.read()})
         value = pipeline.consume("test asd bla 1212", { "tokenDir": "." })
         self.assertEqual(value, 'test www blub 1212')
 
