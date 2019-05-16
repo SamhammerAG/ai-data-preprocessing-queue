@@ -53,10 +53,19 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual(value, 'test  replacedgermanphonenumber  test')
 
     def test_token_replacement(self):
-        handler = open("./token_replacement_testdata.csv", "r")
+        handler = open("./token_replacement.csv", "r")
         pipeline = Pipeline(["token_replacement"], { "token_replacement": handler.read()})
-        value = pipeline.consume("test asd bla 1212", { "tokenDir": "." })
-        self.assertEqual(value, 'test www blub 1212')
+        value = pipeline.consume("test aufgeregt")
+        self.assertEqual(value, 'test angryword')
+
+    def test_spellcheck(self):
+        pipeline = Pipeline(["spellcheck"], { "spellcheck": "kopie\r\nartikel\r\n"})
+        value = pipeline.consume("kopie koipe artikel artikle artilek artleki")
+        self.assertEqual(value, 'kopie kopie artikel artikel artikel artleki')
+
+        pipeline = Pipeline(["spellcheck"])
+        value = pipeline.consume("kopie koipe artikel artikle artilek artleki")
+        self.assertEqual(value, 'kopie koipe artikel artikle artilek artleki')
 
 if __name__ == '__main__':
     unittest.main()
