@@ -1,0 +1,3 @@
+"(\(?([\d\-\)\–\+\/\(]+){6,}\)?([ .-–\/]?)([\d]+))",replacedgermanphonenumber,10
+"\bDE\d{2}\s*\d{4}\s*\d{4}\s*\d{4}\s*\d{4}\s*\d{2}\b",replacediban,1
+"\b([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}\b",replacedpostcode,20

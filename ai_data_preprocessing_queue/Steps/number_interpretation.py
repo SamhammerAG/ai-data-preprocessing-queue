@@ -1,12 +1,17 @@
 import re
-import glob
-from pathlib import Path
+import os
+from io import StringIO
 from os.path import dirname
-from typing import List
 import pandas
 
+
 def step(item, itemState, globalState, preprocessorData: str):
-    csv = pandas.read_csv(dirname(__file__)+"/../data/number_interpretation.csv", header=None, usecols=[0,1,2], quotechar='"')
+    if preprocessorData is "":
+        csvPath = os.path.join(dirname(__file__), "..", "data", "number_interpretation.csv")
+        csv = pandas.read_csv(csvPath, header=None, usecols=[0, 1, 2], quotechar='"')
+    else:
+        csv = pandas.read_csv(StringIO(preprocessorData), header=None, usecols=[0, 1, 2], quotechar='"')
+
     csv[0] = csv[0].str.strip()
     csv[1] = csv[1].str.strip()
     csv[2] = pandas.to_numeric(csv[2])
