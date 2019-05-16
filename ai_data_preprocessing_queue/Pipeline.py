@@ -1,7 +1,8 @@
 from .StepProcessor import StepProcessor
 from typing import Dict
 
-class Pipeline():
+
+class Pipeline:
 
     def __init__(self, step_names, preprocessorData: Dict[str, str] = {}):
         self.step_processors = []

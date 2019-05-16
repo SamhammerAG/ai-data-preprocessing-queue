@@ -1,6 +1,7 @@
 import importlib
 from .Steps import language_detect
 
+
 class StepProcessor:
     def __init__(self, name, stepData):
         self.name = name
