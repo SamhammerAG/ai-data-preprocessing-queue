@@ -1,7 +1,7 @@
 import unittest
 
 from ai_data_preprocessing_queue.Pipeline import Pipeline
-import re
+
 
 class PipelineTest(unittest.TestCase):
 
@@ -52,9 +52,32 @@ class PipelineTest(unittest.TestCase):
         value = pipeline.consume("test 015125391111 test")
         self.assertEqual(value, 'test  replacedgermanphonenumber  test')
 
+    def test_number_interpretation_with_preprocessor_data(self):
+        handler = open("./number_interpretation_testdata.csv", "r")
+        pipeline = Pipeline(["number_interpretation"], {"number_interpretation": handler.read()})
+        # should not replace dates with custom data
+        value = pipeline.consume("test 1.1.2019 20.2.2003 1.1.20 01.01.20 1.1.1900 1.1. 01.01. test")
+        self.assertEqual(value, 'test 1.1.2019 20.2.2003 1.1.20 01.01.20 1.1.1900 1.1. 01.01. test')
+        # iban
+        value = pipeline.consume("test DE12500101170648489890")
+        self.assertEqual('test  replacediban ', value)
+        # postcode
+        value = pipeline.consume("test 92637 92709 test")
+        self.assertEqual('test  replacedpostcode   replacedpostcode  test', value)
+        # german phone
+        value = pipeline.consume("test 0961123456 test")
+        self.assertEqual('test  replacedgermanphonenumber  test', value)
+        value = pipeline.consume("test (0961)123456 test")
+        self.assertEqual('test  replacedgermanphonenumber  test', value)
+        value = pipeline.consume("test +49(0)121-79536-77 test")
+        self.assertEqual('test  replacedgermanphonenumber  test', value)
+        # german handy
+        value = pipeline.consume("test 015125391111 test")
+        self.assertEqual(value, 'test  replacedgermanphonenumber  test')
+
     def test_token_replacement(self):
         handler = open("./token_replacement.csv", "r")
-        pipeline = Pipeline(["token_replacement"], { "token_replacement": handler.read()})
+        pipeline = Pipeline(["token_replacement"], {"token_replacement": handler.read()})
         value = pipeline.consume("test aufgeregt")
         self.assertEqual(value, 'test angryword')
 
@@ -66,6 +89,7 @@ class PipelineTest(unittest.TestCase):
         pipeline = Pipeline(["spellcheck"])
         value = pipeline.consume("kopie koipe artikel artikle artilek artleki")
         self.assertEqual(value, 'kopie koipe artikel artikle artilek artleki')
+
 
 if __name__ == '__main__':
     unittest.main()
