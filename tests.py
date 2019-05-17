@@ -91,6 +91,11 @@ class PipelineTest(unittest.TestCase):
         value = pipeline.consume("kopie koipe artikel artikle artilek artleki")
         self.assertEqual(value, 'kopie koipe artikel artikle artilek artleki')
 
+    def test_spellcheck_should_not_throw_exception_for_short_values(self):
+        pipeline = Pipeline(["spellcheck"], {"spellcheck": "kopie\r\nartikel\r\n"})
+        value = pipeline.consume("k koipe artikel")
+        self.assertEqual(value, 'k kopie artikel')
+
 
 if __name__ == '__main__':
     unittest.main()

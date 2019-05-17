@@ -18,7 +18,11 @@ def step(item: str, itemState, globalState, preprocessorData: str):
 
     for itemWord in allItemWords:
         length = len(itemWord)
-        allWordsToCheck = reduce(lambda x, y: x + y, [x.get("items") for x in groupedReplaceWords if length - 2 <= x.get("key") <= length + 2])
+        items = [x.get("items") for x in groupedReplaceWords if length - 2 <= x.get("key") <= length + 2]
+        if len(items) == 0:
+            continue
+
+        allWordsToCheck = reduce(lambda x, y: x + y, items)
 
         for w in allWordsToCheck:
             if len(itemWord) < 4 and levenshtein(itemWord, w) == 1:
