@@ -1,5 +1,6 @@
 import importlib
-from .Steps import language_detect
+# required import because of logic in init
+from . import Steps
 
 
 class StepProcessor:
