@@ -15,8 +15,13 @@ def step(item: str, itemState: dict, globalState: dict, preprocessorData: str) -
     # sort
     sortFn = lambda i: 0 - i[2]
     lines = sorted(lines, key=sortFn)
+    items = item.split(" ")
 
     for l in lines:
-        item = item.replace(l[0], l[1])
+        for i in range(len(items)):
+            if items[i] == l[0]:
+                items[i] = l[1]
+
+    item = str.join(" ", items)
 
     return item
