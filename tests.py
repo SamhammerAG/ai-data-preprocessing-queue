@@ -87,7 +87,7 @@ class PipelineTest(unittest.TestCase):
         pipeline = Pipeline(["token_replacement"], {"token_replacement": handler.read()})
         handler.close()
         value = pipeline.consume("test abg. abgabgeschlossen 1212")
-        self.assertEqual('test abgeschlossen abgabgeschlossen 1212', value)
+        self.assertEqual('test abgeschlossen. abgabgeschlossen 1212', value)
 
     def test_spellcheck(self):
         pipeline = Pipeline(["spellcheck"], { "spellcheck": "kopie\r\nartikel\r\n"})

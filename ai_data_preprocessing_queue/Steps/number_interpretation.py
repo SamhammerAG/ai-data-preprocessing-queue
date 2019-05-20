@@ -8,9 +8,9 @@ import pandas
 def step(item, itemState, globalState, preprocessorData: str):
     if preprocessorData is "":
         csvPath = os.path.join(dirname(__file__), "..", "data", "number_interpretation.csv")
-        csv = pandas.read_csv(csvPath, header=None, usecols=[0, 1, 2], quotechar='"')
+        csv = pandas.read_csv(csvPath, header=None, usecols=[0, 1, 2], quotechar='"', encoding="utf8")
     else:
-        csv = pandas.read_csv(StringIO(preprocessorData), header=None, usecols=[0, 1, 2], quotechar='"')
+        csv = pandas.read_csv(StringIO(preprocessorData), header=None, usecols=[0, 1, 2], quotechar='"', encoding="utf8")
 
     csv[0] = csv[0].str.strip()
     csv[1] = csv[1].str.strip()
