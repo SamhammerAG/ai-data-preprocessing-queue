@@ -32,23 +32,23 @@ pip install git+https://github.com/SamhammerAG/ai-data-preprocessing-queue.git@m
 ## Existing preprocessors
 
 ### To Lower Case
-Name: to_lower
-Required additional data: -
-Converts the text to lower case characters
+Name: to_lower  
+Required additional data: -  
+Converts the text to lower case characters.
 
 ### Text only
-Name: text_only
-Required additional data: -
-Removes all special characters and numbers from the text
+Name: text_only  
+Required additional data: -  
+Removes all special characters and numbers from the text.
 
 ### Spellcheck (Levenshtein)
-Name: spellcheck
-Required additional data: A string containing words, separated by newline, i.e. "word1\r\nword2"
+Name: spellcheck  
+Required additional data: A string containing words, separated by newline, i.e. "word1\r\nword2"  
 Takes a list of words which depict correct spelling. Words within the given text that are close to a word from this list will be replaced with the listed word.
 
 ### Number Interpretation
-Name: number_interpretation
-Required additional data: CSV-Data in string form with following line-format: <pattern>,<replacement>,<order>
+Name: number_interpretation  
+Required additional data: CSV-Data in string form with following line-format: &lt;pattern&gt;,&lt;replacement&gt;,&lt;order&gt;
   - pattern: a regex pattern that is to be found within the text
   - replacement: the word/text, with which any match should be replaced
   - order: the order of the entries, in which they should be applied (largest number will be applied first!)
@@ -56,8 +56,8 @@ Required additional data: CSV-Data in string form with following line-format: <p
 This one will take your text and search for occurences of specific entities. Those are replaced by keywords. Using this approach, two text corpa are similar if both contain IBAN/Phonenumbers/etc.
 
 ### Token Replacement
-Name: token_replacement
-Required additional data: CSV-Data in string form with following line-format: <text>,<replacement>,<order>
+Name: token_replacement  
+Required additional data: CSV-Data in string form with following line-format: &lt;text&gt;,&lt;replacement&gt;,&lt;order&gt;
   - text: one or multiple words to search within the text
   - replacement: the word/text, with which any match should be replaced
   - order: the order of the entries, in which they should be applied (largest number will be applied first!)
