@@ -4,7 +4,7 @@ from typing import Dict, Optional
 
 class Pipeline:
 
-    def __init__(self, step_dict: Dict[str, Optional[str]] = {}):
+    def __init__(self, step_dict: Dict[str, Optional[str]]):
         self.step_processors = []
         for step_name in list(filter(None, step_dict.keys())):
             processor = StepProcessor(step_name, step_dict.get(step_name))

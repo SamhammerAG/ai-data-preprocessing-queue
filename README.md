@@ -5,18 +5,23 @@ It contains different text processing steps that can be enabled or disabled dyna
 
 ## Usage
 ```python
+from ai_data_preprocessing_queue import Pipeline
+
 state = {}
 pre_processor_dict = {
   'to_lower' : None,
   'spellcheck' : 'test\r\ntesting'
 }
-pipeline = Pipeline(['to_lower', 'spellcheck'], pre_processor_dict)
+pipeline = Pipeline(pre_processor_dict)
 value = pipeline.consume('Input text', state)
 ```
 State is optional here and can be used to cache preprocessing data between pipeline calls.
 
-Some preprocessors also require additional data to function. The data has to be converted to a string-form and assigned to it's preprocessor within a dictionary (see "pre_processor_dict" in the example above).
-This dictionary needs to be transmitted to the pipeline through it's constructor.
+The preprocessors that the pipeline should use have to be transmitted as keys within a dictionary.  
+Some preprocessors also require additional data to function.  
+The data has to be converted to a string-form and assigned to it's preprocessor within the dictionary.
+
+This dictionary then needs to be transmitted to the pipeline through it's constructor.
 
 For more info about which preprocessors need data and how this data needs to be formatted, see the preprocessor list below.
 
