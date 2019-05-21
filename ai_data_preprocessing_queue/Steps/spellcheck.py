@@ -2,7 +2,7 @@ import numpy as np
 from functools import reduce
 
 
-def step(item: str, itemState, globalState, preprocessorData: str):
+def step(item: str, itemState: dict, globalState: dict, preprocessorData: str):
     if preprocessorData == None:
         return item
 
@@ -17,6 +17,9 @@ def step(item: str, itemState, globalState, preprocessorData: str):
     # all words with more than 4 can have distance 2, al other 1
 
     for itemWord in allItemWords:
+        if itemWord in words:
+            continue
+
         length = len(itemWord)
         items = [x.get("items") for x in groupedReplaceWords if length - 2 <= x.get("key") <= length + 2]
         if len(items) == 0:
@@ -25,15 +28,15 @@ def step(item: str, itemState, globalState, preprocessorData: str):
         allWordsToCheck = reduce(lambda x, y: x + y, items)
 
         for w in allWordsToCheck:
-            if len(itemWord) < 4 and levenshtein(itemWord, w) == 1:
+            if len(itemWord) < 4 and _levenshtein(itemWord, w) == 1:
                 item = item.replace(itemWord, w)
-            elif len(itemWord) >= 4 and 1 <= levenshtein(itemWord, w) <= 2:
+            elif len(itemWord) >= 4 and 1 <= _levenshtein(itemWord, w) <= 2:
                 item = item.replace(itemWord, w)
 
     return item
 
 
-def levenshtein(seq1, seq2):
+def _levenshtein(seq1, seq2):
     size_x = len(seq1) + 1
     size_y = len(seq2) + 1
     matrix = np.zeros((size_x, size_y))
