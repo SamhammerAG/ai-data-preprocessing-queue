@@ -56,7 +56,7 @@ Name: number_interpretation
 Required additional data: CSV-Data in string form with following line-format: &lt;pattern&gt;,&lt;replacement&gt;,&lt;order&gt;
   - pattern: a regex pattern that is to be found within the text
   - replacement: the word/text, with which any match should be replaced
-  - order: the order of the entries, in which they should be applied (largest number will be applied first!)
+  - order: the order of the entries, in which they should be applied (lowest number will be applied first!)
 
 This one will take your text and search for occurences of specific entities. Those are replaced by keywords. Using this approach, two text corpa are similar if both contain IBAN/Phonenumbers/etc.
 
