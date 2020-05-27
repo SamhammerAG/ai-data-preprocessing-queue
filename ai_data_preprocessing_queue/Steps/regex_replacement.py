@@ -18,7 +18,7 @@ def step(item: str, itemState: dict, globalState: dict, preprocessorData: str):
 
 def _get_data_from_store_or_reload(globalState: dict, preprocessorData: str) -> pandas.DataFrame:
     if globalState is not None:
-        dictIdentifier = "numberInterpretationPreprocessorData"
+        dictIdentifier = "regexReplacementPreprocessorData"
         if dictIdentifier not in globalState:
             preparedData = _prepare_pre_processor_data(preprocessorData)
             globalState[dictIdentifier] = preparedData

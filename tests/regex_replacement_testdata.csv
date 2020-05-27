@@ -6,3 +6,7 @@
 "\bDE\d{2}\s*\d{4}\s*\d{4}\s*\d{4}\s*\d{4}\s*\d{2}\b",replacediban,1
 "(\(?([\d\-\)\–\+\/\(]+){6,}\)?([ .-–\/]?)([\d]+))",replacedgermanphonenumber,10
 "\b([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}\b",replacedpostcode,20
+"\bpw\b",password,5
+"\bpass(\s|\-|\.)?wd\b",password,8
+"\bpass(\-|\s|\.)word",password,12
+"\bpwort\b",password,10

@@ -41,6 +41,16 @@ Name: to_lower
 Required additional data: -  
 Converts the text to lower case characters.
 
+### Remove Numbers
+Name: remove_numbers  
+Required additional data: -  
+Removes all numbers from the text.
+
+### Remove Punctuation
+Name: remove_punctuation  
+Required additional data: -  
+Removes all special characters from the text.
+
 ### Text only
 Name: text_only  
 Required additional data: -  
@@ -51,7 +61,7 @@ Name: spellcheck
 Required additional data: A string containing words, separated by newline, i.e. "word1\r\nword2"  
 Takes a list of words which depict correct spelling. Words within the given text that are close to a word from this list will be replaced with the listed word.
 
-### Number Interpretation
+### Regex replacement
 Name: number_interpretation  
 Required additional data: CSV-Data in string form with following line-format: &lt;pattern&gt;,&lt;replacement&gt;,&lt;order&gt;
   - pattern: a regex pattern that is to be found within the text

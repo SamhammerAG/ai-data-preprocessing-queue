@@ -10,6 +10,16 @@ class PipelineTest(unittest.TestCase):
         value = pipeline.consume('123 text - "more" text , and .')
         self.assertEqual('    text    more  text   and  ', value)
 
+    def test_remove_numbers(self):
+        pipeline = Pipeline({'remove_numbers': None})
+        value = pipeline.consume('123 text - "more" text123 , and .')
+        self.assertEqual('    text - "more" text    , and .', value)
+
+    def test_remove_punctuation(self):
+        pipeline = Pipeline({'remove_punctuation': None})
+        value = pipeline.consume('123 text - "more" text123 , and .')
+        self.assertEqual('123 text    more  text123   and  ', value)
+
     def test_text_to_lower(self):
         pipeline = Pipeline({'to_lower': None})
         value = pipeline.consume('This is a Test text with CamelCase')
@@ -30,14 +40,14 @@ class PipelineTest(unittest.TestCase):
         value = pipeline.consume('123 CamelCase')
         self.assertEqual('    camelcase', value)
 
-    def test_number_interpretation_do_not_crash_for_no_data(self):
-        pipeline = Pipeline({"number_interpretation": None})
+    def test_regex_replacement_do_not_crash_for_no_data(self):
+        pipeline = Pipeline({"regex_replacement": None})
         value = pipeline.consume("test text")
         self.assertEqual("test text", value)
 
-    def test_number_interpretation(self):
-        handler = open("./number_interpretation_testdata.csv", "r")
-        pipeline = Pipeline({"number_interpretation": handler.read()})
+    def test_regex_replacement(self):
+        handler = open("./regex_replacement_testdata.csv", "r")
+        pipeline = Pipeline({"regex_replacement": handler.read()})
         handler.close()
         # date
         value = pipeline.consume("test 1.1.2019 20.2.2003 1.1.20 01.01.20 1.1.1900 1.1. 01.01. test")
@@ -58,6 +68,14 @@ class PipelineTest(unittest.TestCase):
         # german handy
         value = pipeline.consume("test 015125391111 test")
         self.assertEqual('test  replacedgermanphonenumber  test', value)
+
+        # some password variation
+        value = pipeline.consume("test pw test")
+        self.assertEqual('test  password  test', value)
+        value = pipeline.consume("test pwort test")
+        self.assertEqual('test  password  test', value)
+        value = pipeline.consume("test pass word test")
+        self.assertEqual('test  password  test', value)
 
     def test_token_replacement_do_not_crash_for_no_data(self):
         pipeline = Pipeline({"token_replacement": None})
