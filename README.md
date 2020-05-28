@@ -62,7 +62,7 @@ Required additional data: A string containing words, separated by newline, i.e. 
 Takes a list of words which depict correct spelling. Words within the given text that are close to a word from this list will be replaced with the listed word.
 
 ### Regex replacement
-Name: number_interpretation  
+Name: regex_replacement  
 Required additional data: CSV-Data in string form with following line-format: &lt;pattern&gt;,&lt;replacement&gt;,&lt;order&gt;
   - pattern: a regex pattern that is to be found within the text
   - replacement: the word/text, with which any match should be replaced
