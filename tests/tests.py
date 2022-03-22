@@ -1,6 +1,14 @@
+from os import path
 import unittest
 
+import cv2
+import pdfplumber
+
+from PIL import Image
+
 from ai_data_preprocessing_queue.Pipeline import Pipeline
+
+ABS_PATH_TEST_DATA = path.join(path.dirname(path.abspath(__file__)), "test_data")
 
 
 class PipelineTest(unittest.TestCase):
@@ -46,12 +54,15 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual("test text", value)
 
     def test_regex_replacement(self):
-        handler = open("./regex_replacement_testdata.csv", "r")
+        handler = open(path.join(ABS_PATH_TEST_DATA, "regex_replacement_testdata.csv"), "r")
         pipeline = Pipeline({"regex_replacement": handler.read()})
         handler.close()
         # date
         value = pipeline.consume("test 1.1.2019 20.2.2003 1.1.20 01.01.20 1.1.1900 1.1. 01.01. test")
-        self.assertEqual('test  replaceddate   replaceddate   replaceddate  replaceddate replaceddate   replaceddate  replaceddate test', value)
+        self.assertEqual(
+            'test  replaceddate   replaceddate   replaceddate'
+            '  replaceddate replaceddate   replaceddate  replaceddate test',
+            value)
         # iban
         value = pipeline.consume("test DE12500101170648489890")
         self.assertEqual('test  replacediban ', value)
@@ -83,21 +94,21 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual("test text", value)
 
     def test_token_replacement(self):
-        handler = open("./token_replacement_testdata.csv", "r")
+        handler = open(path.join(ABS_PATH_TEST_DATA, "token_replacement_testdata.csv"), "r")
         pipeline = Pipeline({"token_replacement": handler.read()})
         handler.close()
         value = pipeline.consume("test asd bla 1212")
         self.assertEqual('test www blub 1212', value)
 
     def test_token_replacement_do_not_replace_parts_of_word(self):
-        handler = open("./token_replacement_testdata.csv", "r")
+        handler = open(path.join(ABS_PATH_TEST_DATA, "token_replacement_testdata.csv"), "r")
         pipeline = Pipeline({"token_replacement": handler.read()})
         handler.close()
         value = pipeline.consume("test abg. abgabgeschlossen 1212")
         self.assertEqual('test abgeschlossen abgabgeschlossen 1212', value)
 
     def test_token_replacement_also_replace_dots_at_end_of_phrase(self):
-        handler = open("./token_replacement_testdata.csv", "r")
+        handler = open(path.join(ABS_PATH_TEST_DATA, "token_replacement_testdata.csv"), "r")
         pipeline = Pipeline({"token_replacement": handler.read()})
         handler.close()
         value = pipeline.consume("abg. 1212")
@@ -117,6 +128,42 @@ class PipelineTest(unittest.TestCase):
         pipeline = Pipeline({"spellcheck": "kopie\r\nartikel\r\n"})
         value = pipeline.consume("k koipe artikel")
         self.assertEqual('k kopie artikel', value)
+
+    def test_ocr_jpg(self):
+        pipeline = Pipeline({'ocr': None})
+        state = {"image_to_string": {"lang": "eng", "config": "--psm 1"}}
+        text = ""
+        with Image.open(path.join(ABS_PATH_TEST_DATA, "test.jpg")) as image:
+            image.load()
+            image.convert("RGBA")
+            text += pipeline.consume(image, state)
+        self.assertIn("There is a test of optical character recognition.", text)
+
+    def test_ocr_jpg_text_only(self):
+        pipeline = Pipeline({'ocr': None, 'text_only': None})
+        state = {"image_to_string": {"lang": "eng", "config": "--psm 1"}}
+        text = ""
+        with Image.open(path.join(ABS_PATH_TEST_DATA, "test.jpg")) as image:
+            image.load()
+            image.convert("RGBA")
+            text += pipeline.consume(image, state)
+        self.assertEqual(text.find('.'), -1)
+
+    def test_pdf(self):
+        pipeline = Pipeline({'ocr': None})
+        state = {"image_to_string": {"lang": "eng", "config": "--psm 1"}}
+        text = ""
+        with pdfplumber.open(path.join(ABS_PATH_TEST_DATA, "test.pdf")) as pdf:
+            for page in pdf.pages:
+                text += pipeline.consume(page, state)
+        self.assertIn("There is a test of optical character recognition.", text)
+
+    def test_tiff(self):
+        image = cv2.imread(path.join(ABS_PATH_TEST_DATA, "test_180.tiff"), 0)
+        pipeline = Pipeline({'ocr': None})
+        state = {"image_to_string": {"lang": "eng", "config": "--psm 1"}}
+        text = pipeline.consume(image, state)
+        self.assertIn("There is a test of optical character recognition.", text)
 
 
 if __name__ == '__main__':

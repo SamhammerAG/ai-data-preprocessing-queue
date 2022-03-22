@@ -15,6 +15,8 @@ pre_processor_dict = {
 pipeline = Pipeline(pre_processor_dict)
 value = pipeline.consume('Input text', state)
 ```
+        
+
 State is optional here and can be used to cache preprocessing data between pipeline calls.
 
 The preprocessors that the pipeline should use have to be transmitted as keys within a dictionary.  
@@ -23,9 +25,25 @@ The data has to be converted to a string-form and assigned to it's preprocessor 
 
 This dictionary then needs to be transmitted to the pipeline through it's constructor.
 
+```python
+import pdfplumber
+from ai_data_preprocessing_queue import Pipeline
+
+state = {"image_to_string": {"lang": "deu", "config": "--psm 1"}}
+pipeline = Pipeline({'ocr': None, 'text_only': None})
+
+value = ""
+with pdfplumber.open('test.pdf') as pdf:
+    for page in pdf.pages:
+        value += pipeline.consume(page, state)
+
+```
+
+Ocr step should be used first in the pipeline.
+
 For more info about which preprocessors need data and how this data needs to be formatted, see the preprocessor list below.
 
-Note: Pipeline has to be instanciated only once and can be reused.
+Note: Pipeline has to be instantiated only once and can be reused.
 
 ## Local installation
 
@@ -33,13 +51,20 @@ To install from master branch just use the following command:
 ```
 pip install git+https://github.com/SamhammerAG/ai-data-preprocessing-queue.git@master#ai-data-preprocessing-queue
 ```
+Install Tesseract Application with required languages (see OCR article in confluence), and add location to the PATH Environment Variable (Path=C:\...). 
 
 ## Existing preprocessors
 
-### To Lower Case
+### OCR
 Name: to_lower  
 Required additional data: -  
-Converts the text to lower case characters.
+Converts the text to lower case characters. This step accepts a `np.ndarray` from `PIL.Image.open`, `PIL.JpegImagePlugin.JpegImageFile` or `pdfplumber.page.Page` as `item` parameter.
+
+### To Lower Case
+Name: ocr  
+Required additional data: -  
+Converts jpg, tiff files or pdf pages into a text. 
+
 
 ### Remove Numbers
 Name: remove_numbers  
