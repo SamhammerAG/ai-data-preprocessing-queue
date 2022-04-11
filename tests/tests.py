@@ -7,6 +7,7 @@ import pdfplumber
 from PIL import Image
 
 from ai_data_preprocessing_queue.Pipeline import Pipeline
+from ai_data_preprocessing_queue.services.image_file_services import scale_too_big_image, scale_too_big_cv2_image
 
 ABS_PATH_TEST_DATA = path.join(path.dirname(path.abspath(__file__)), "test_data")
 
@@ -129,7 +130,7 @@ class PipelineTest(unittest.TestCase):
         value = pipeline.consume("k koipe artikel")
         self.assertEqual('k kopie artikel', value)
 
-    def test_ocr_jpg(self):
+    def test_ocr_jpg_image(self):
         pipeline = Pipeline({'ocr': None})
         state = {"image_to_string": {"lang": "eng", "config": "--psm 1"}}
         text = ""
@@ -139,7 +140,7 @@ class PipelineTest(unittest.TestCase):
             text += pipeline.consume(image, state)
         self.assertIn("There is a test of optical character recognition.", text)
 
-    def test_ocr_jpg_text_only(self):
+    def test_ocr_jpg_image_and_text_only(self):
         pipeline = Pipeline({'ocr': None, 'text_only': None})
         state = {"image_to_string": {"lang": "eng", "config": "--psm 1"}}
         text = ""
@@ -149,7 +150,7 @@ class PipelineTest(unittest.TestCase):
             text += pipeline.consume(image, state)
         self.assertEqual(text.find('.'), -1)
 
-    def test_pdf(self):
+    def test_ocr_pdf_text_layer(self):
         pipeline = Pipeline({'ocr': None})
         state = {"image_to_string": {"lang": "eng", "config": "--psm 1"}}
         text = ""
@@ -158,12 +159,35 @@ class PipelineTest(unittest.TestCase):
                 text += pipeline.consume(page, state)
         self.assertIn("There is a test of optical character recognition.", text)
 
-    def test_tiff(self):
+    def test_ocr_tiff_cv2_image(self):
         image = cv2.imread(path.join(ABS_PATH_TEST_DATA, "test_180.tiff"), 0)
         pipeline = Pipeline({'ocr': None})
         state = {"image_to_string": {"lang": "eng", "config": "--psm 1"}}
         text = pipeline.consume(image, state)
         self.assertIn("There is a test of optical character recognition.", text)
+
+    def test_ocr_tiff_image_scaled(self):
+        image = Image.open(path.join(ABS_PATH_TEST_DATA, "test_180.tiff"))
+        pipeline = Pipeline({'ocr': None})
+        state = {"image_to_string": {"lang": "eng", "cut_of_size": 1700000}}
+        text = pipeline.consume(image, state)
+        self.assertIn("There is a test of optical character recognition.", text)
+
+    def test_scale_tiff_image(self):
+        image = Image.open(path.join(ABS_PATH_TEST_DATA, "test_180.tiff"))
+        size = image.size[0] * image.size[1]
+        scaling_factor = 10
+        image = scale_too_big_image(image, cutoff_size=size/scaling_factor)
+        scaled_size = image.size[0] * image.size[1] * scaling_factor**2
+        self.assertAlmostEqual(1, scaled_size/size, places=1)
+
+    def test_scale_tiff_cv2_image(self):
+        image = cv2.imread(path.join(ABS_PATH_TEST_DATA, "test_180.tiff"), 0)
+        size = image.shape[1] * image.shape[0]
+        scaling_factor = 10
+        image = scale_too_big_cv2_image(image, cutoff_size=size/scaling_factor)
+        scaled_size = image.shape[0] * image.shape[1] * scaling_factor**2
+        self.assertAlmostEqual(1, scaled_size/size, places=1)
 
 
 if __name__ == '__main__':
