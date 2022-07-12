@@ -4,7 +4,7 @@ from PIL import Image
 from PIL.JpegImagePlugin import JpegImageFile
 from langdetect import detect_langs
 from pdfplumber import page
-from cv2 import cv2
+import cv2
 
 from ai_data_preprocessing_queue.services.image_file_services import scale_too_big_image, scale_too_big_cv2_image
 
