@@ -40,4 +40,4 @@ def _prepare_pre_processor_data(preprocessorData: str) -> pandas.DataFrame:
     csv["sort"] = csv[2]
 
     # sort
-    return csv.sort_values("sort", inplace=False).drop("sort", "columns")
+    return csv.sort_values("sort", inplace=False).drop("sort", axis=1)
