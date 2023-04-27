@@ -1,9 +1,17 @@
 # Ai Data Preprocessing Queue
+[![Maintainability][codeclimate-image]][codeclimate-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
+[![Known Vulnerabilities][snyk-image]][snyk-url]
 
+## What it does
 This tool is intended for preparing data for further processing.
 It contains different text processing steps that can be enabled or disabled dynamically.
 
-## Usage
+
+### Installation
+pip install ai-data-preprocessing-queue
+
+## How to use
 ```python
 from ai_data_preprocessing_queue import Pipeline
 
@@ -44,14 +52,6 @@ Ocr step should be used first in the pipeline.
 For more info about which preprocessors need data and how this data needs to be formatted, see the preprocessor list below.
 
 Note: Pipeline has to be instantiated only once and can be reused.
-
-## Local installation
-
-To install from master branch just use the following command:
-```
-pip install git+https://github.com/SamhammerAG/ai-data-preprocessing-queue.git@master#ai-data-preprocessing-queue
-```
-Install Tesseract Application with required languages (see OCR article in confluence), and add location to the PATH Environment Variable (Path=C:\...). 
 
 ## Existing preprocessors
 
@@ -103,3 +103,36 @@ Required additional data: CSV-Data in string form with following line-format: &l
 
 With this preprocessor you can replace specific words and abbreviations within the text with specified tokens.
 It is also possible to replace abbreviations that are ending with a dot. Other special characters are not supported, though.
+
+## How to start developing
+
+### With vscode
+
+Just install vscode with dev containers extension. All required extensions and configurations are prepared automatically.
+
+### With pycharm
+
+* Install latest pycharm
+* Install pycharm plugin BlackConnect
+* Install pycharm plugin Mypy
+* Configure the python interpreter/venv
+* pip install requirements-dev.txt
+* pip install black[d]
+* Ctl+Alt+S => Check Tools => BlackConnect => Trigger when saving changed files
+* Ctl+Alt+S => Check Tools => BlackConnect => Trigger on code reformat
+* Ctl+Alt+S => Click Tools => BlackConnect => "Load from pyproject.yaml" (ensure line length is 120)
+* Ctl+Alt+S => Click Tools => BlackConnect => Configure path to the blackd.exe at the "local instance" config (e.g. C:\Python310\Scripts\blackd.exe)
+* Ctl+Alt+S => Click Tools => Actions on save => Reformat code
+* Restart pycharm
+
+## How to publish
+* Update the version in setup.py and commit your change
+* Create a tag with the same version number
+* Let github do the rest
+
+[codeclimate-image]:https://api.codeclimate.com/v1/badges/bcde3599d064f687803f/maintainability
+[codeclimate-url]:https://codeclimate.com/github/SamhammerAG/ai_data_preprocessing_queue/maintainability
+[coveralls-image]:https://coveralls.io/repos/github/SamhammerAG/ai_data_preprocessing_queue/badge.svg?branch=master
+[coveralls-url]:https://coveralls.io/github/SamhammerAG/ai_data_preprocessing_queue?branch=master
+[snyk-image]:https://snyk.io/test/github/SamhammerAG/ai_data_preprocessing_queue/badge.svg
+[snyk-url]:https://snyk.io/test/github/SamhammerAG/ai_data_preprocessing_queue
