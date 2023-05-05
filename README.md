@@ -108,7 +108,7 @@ Just install vscode with dev containers extension. All required extensions and c
 * Let github do the rest
 
 [codeclimate-image]:https://api.codeclimate.com/v1/badges/bcde3599d064f687803f/maintainability
-[codeclimate-url]:https://codeclimate.com/github/SamhammerAG/ai-data_preprocessing-queue/maintainability
+[codeclimate-url]:https://codeclimate.com/github/SamhammerAG/ai-data-preprocessing-queue/maintainability
 [coveralls-image]:https://coveralls.io/repos/github/SamhammerAG/ai-data-preprocessing-queue/badge.svg?branch=master
 [coveralls-url]:https://coveralls.io/github/SamhammerAG/ai-data-preprocessing-queue?branch=master
 [snyk-image]:https://snyk.io/test/github/SamhammerAG/ai-data-preprocessing-queue/badge.svg
