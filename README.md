@@ -1,4 +1,4 @@
-# Ai Data Preprocessing Queue
+# ai-data-preprocessing-queue
 [![Maintainability][codeclimate-image]][codeclimate-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![Known Vulnerabilities][snyk-image]][snyk-url]
