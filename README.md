@@ -79,7 +79,7 @@ Required additional data: CSV data in string form with the following line format
   - replacement: the word/text by which any match should be replaced
   - order: the order in which the regex entries are supposed to be applied (lowest number will be applied first!)
 
-This preprocessor will search for occurences of specific entities in your text and replace them by a specified pattern.
+This preprocessor will search for occurrences of specific entities in your text and replace them by a specified pattern.
 
 ### Token Replacement
 Name: token_replacement
@@ -100,7 +100,7 @@ Just install VS Code with the Dev Containers extension. All required extensions 
 ### With PyCharm
 
 * Install the latest PyCharm version
-* Install PyCcharm plugin BlackConnect
+* Install PyCharm plugin BlackConnect
 * Install PyCharm plugin Mypy
 * Configure the Python interpreter/venv
 * pip install requirements-dev.txt
