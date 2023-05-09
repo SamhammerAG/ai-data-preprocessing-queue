@@ -1,32 +1,34 @@
 import re
 from io import StringIO
+from typing import Any, Dict, Optional
+
 import pandas
 
 
-def step(item: str, itemState: dict, globalState: dict, preprocessorData: str):
-    if preprocessorData is None or preprocessorData == "":
+def step(item: Any, itemState: Dict[str, Any], globalState: Optional[Dict[str, Any]], preprocessorData: str) -> Any:
+    if preprocessorData is None or not preprocessorData:
         return item
 
     csv = _get_data_from_store_or_reload(globalState, preprocessorData)
 
     for _, row in csv.iterrows():
         pattern = re.compile(row[0])
-        item = pattern.sub(' ' + row[1] + ' ', item)
+        item = pattern.sub(" " + row[1] + " ", item)
 
     return item
 
 
-def _get_data_from_store_or_reload(globalState: dict, preprocessorData: str) -> pandas.DataFrame:
-    if globalState is not None:
-        dictIdentifier = "regexReplacementPreprocessorData"
-        if dictIdentifier not in globalState:
-            preparedData = _prepare_pre_processor_data(preprocessorData)
-            globalState[dictIdentifier] = preparedData
-            return preparedData
-        else:
-            return globalState[dictIdentifier]
-    else:
+def _get_data_from_store_or_reload(globalState: Optional[Dict[str, Any]], preprocessorData: str) -> pandas.DataFrame:
+    if globalState is None:
         return _prepare_pre_processor_data(preprocessorData)
+
+    dictIdentifier = "regexReplacementPreprocessorData"
+    if dictIdentifier in globalState:
+        return globalState[dictIdentifier]
+
+    preparedData = _prepare_pre_processor_data(preprocessorData)
+    globalState[dictIdentifier] = preparedData
+    return preparedData
 
 
 def _prepare_pre_processor_data(preprocessorData: str) -> pandas.DataFrame:
@@ -38,4 +40,4 @@ def _prepare_pre_processor_data(preprocessorData: str) -> pandas.DataFrame:
     csv["sort"] = csv[2]
 
     # sort
-    return csv.sort_values("sort", inplace=False).drop("sort", "columns")
+    return csv.sort_values("sort", inplace=False).drop("sort", axis=1)

@@ -1,3 +1,5 @@
+from typing import Any, Dict, Optional
 
-def step(item, itemState, globalState, preprocessorData: str):
+
+def step(item: Any, itemState: Dict[str, Any], globalState: Optional[Dict[str, Any]], preprocessorData: str) -> Any:
     return item.lower()

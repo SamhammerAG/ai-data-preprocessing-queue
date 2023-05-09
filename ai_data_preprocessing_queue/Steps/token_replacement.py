@@ -1,51 +1,55 @@
 import re
+from typing import Any, Dict, List, Optional
 
 
 # the higher the number the higher the prio
-def step(item: str, itemState: dict, globalState: dict, preprocessorData: str) -> str:
-    if preprocessorData is None or preprocessorData == "":
+def step(item: Any, itemState: Dict[str, Any], globalState: Optional[Dict[str, Any]], preprocessorData: str) -> Any:
+    if preprocessorData is None or not preprocessorData:
         return item
 
     lines = _get_data_from_store_or_reload(globalState, preprocessorData)
 
-    for l in lines:
-        escaped = re.escape(l[0])
+    for line in lines:
+        escaped = re.escape(line[0])
         regex = "\\b" + escaped
 
         # also replace dots at end of word
-        if not l[0].endswith('.'):
+        if not line[0].endswith("."):
             regex = regex + "\\b"
 
         pattern = re.compile(regex)
-        item = pattern.sub(l[1], item)
+        item = pattern.sub(line[1], item)
 
     return item
 
 
-def _get_data_from_store_or_reload(globalState: dict, preprocessorData: str) -> [[str]]:
-    if globalState is not None:
-        dictIdentifier = "tokenReplacementPreprocessorData"
-        if dictIdentifier not in globalState:
-            preparedData = _prepare_pre_processor_data(preprocessorData)
-            globalState[dictIdentifier] = preparedData
-            return preparedData
-        else:
-            return globalState[dictIdentifier]
-    else:
+def _get_data_from_store_or_reload(globalState: Optional[Dict[str, Any]], preprocessorData: str) -> List[List[str]]:
+    if globalState is None:
         return _prepare_pre_processor_data(preprocessorData)
 
+    dictIdentifier = "tokenReplacementPreprocessorData"
+    if dictIdentifier in globalState:
+        return globalState[dictIdentifier]
 
-def _prepare_pre_processor_data(preprocessorData: str) -> [[str]]:
-    lines = [[s.strip() for i, s in enumerate(l.split(",")) if (i == 2 and re.compile(r"^[0-9\s]+$").match(s)) or i < 2] for l in preprocessorData.splitlines() if l.count(",") == 2]
-    lines = [l for l in lines if len(l) == 3]
+    preparedData = _prepare_pre_processor_data(preprocessorData)
+    globalState[dictIdentifier] = preparedData
+    return preparedData
 
-    i = 0
+
+def _prepare_pre_processor_data(preprocessorData: str) -> List[List[str]]:
+    lines: List[List[str]] = [
+        [s.strip() for i, s in enumerate(line.split(",")) if (i == 2 and re.compile(r"^[0-9\s]+$").match(s)) or i < 2]
+        for line in preprocessorData.splitlines()
+        if line.count(",") == 2
+    ]
+    lines = [line for line in lines if len(line) == 3]
+
+    i: int = 0
     while i < len(lines):
-        lines[i][2] = int(lines[i][2])
+        lines[i][2] = int(lines[i][2])  # type: ignore
         i += 1
 
     # sort
-    sortFn = lambda i: 0 - i[2]
-    lines = sorted(lines, key=sortFn)
+    lines = sorted(lines, key=lambda f: 0 - f[2])  # type: ignore
 
     return lines
