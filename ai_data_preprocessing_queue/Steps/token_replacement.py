@@ -3,11 +3,11 @@ from typing import Any, Dict, List, Optional
 
 
 # the higher the number the higher the prio
-def step(item: Any, itemState: Dict[str, Any], globalState: Optional[Dict[str, Any]], preprocessorData: str) -> Any:
-    if preprocessorData is None or not preprocessorData:
+def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> Any:
+    if preprocessor_data is None or not preprocessor_data:
         return item
 
-    lines = _get_data_from_store_or_reload(globalState, preprocessorData)
+    lines = _get_data_from_store_or_reload(global_state, preprocessor_data)
 
     for line in lines:
         escaped = re.escape(line[0])
@@ -23,23 +23,23 @@ def step(item: Any, itemState: Dict[str, Any], globalState: Optional[Dict[str, A
     return item
 
 
-def _get_data_from_store_or_reload(globalState: Optional[Dict[str, Any]], preprocessorData: str) -> List[List[str]]:
-    if globalState is None:
-        return _prepare_pre_processor_data(preprocessorData)
+def _get_data_from_store_or_reload(global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> List[List[str]]:
+    if global_state is None:
+        return _prepare_pre_processor_data(preprocessor_data)
 
-    dictIdentifier = "tokenReplacementPreprocessorData"
-    if dictIdentifier in globalState:
-        return globalState[dictIdentifier]
+    dict_identifier = "tokenReplacementpreprocessor_data"
+    if dict_identifier in global_state:
+        return global_state[dict_identifier]
 
-    preparedData = _prepare_pre_processor_data(preprocessorData)
-    globalState[dictIdentifier] = preparedData
-    return preparedData
+    prepared_data = _prepare_pre_processor_data(preprocessor_data)
+    global_state[dict_identifier] = prepared_data
+    return prepared_data
 
 
-def _prepare_pre_processor_data(preprocessorData: str) -> List[List[str]]:
+def _prepare_pre_processor_data(preprocessor_data: str) -> List[List[str]]:
     lines: List[List[str]] = [
         [s.strip() for i, s in enumerate(line.split(",")) if (i == 2 and re.compile(r"^[0-9\s]+$").match(s)) or i < 2]
-        for line in preprocessorData.splitlines()
+        for line in preprocessor_data.splitlines()
         if line.count(",") == 2
     ]
     lines = [line for line in lines if len(line) == 3]

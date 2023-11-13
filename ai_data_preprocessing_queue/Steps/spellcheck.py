@@ -4,36 +4,36 @@ from typing import Any, Dict, Optional, Set, cast
 import numpy as np
 
 
-def step(item: Any, itemState: Dict[str, Any], globalState: Optional[Dict[str, Any]], preprocessorData: str) -> Any:
-    if preprocessorData is None:
+def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> Any:
+    if preprocessor_data is None:
         return item
 
-    words = preprocessorData.splitlines()
+    words = preprocessor_data.splitlines()
 
     if not words:
         return item
 
     values = {len(w) for w in words}
-    groupedReplaceWords = [{"key": key, "items": list(filter(lambda x: len(x) == key, words))} for key in values]
-    allItemWords: Set[str] = set(item.split(" "))  # reduce all words
+    grouped_replace_words = [{"key": key, "items": list(filter(lambda x: len(x) == key, words))} for key in values]
+    all_item_words: Set[str] = set(item.split(" "))  # reduce all words
     # all words with more than 4 can have distance 2, al other 1
 
-    for itemWord in allItemWords:
-        if itemWord in words:
+    for item_word in all_item_words:
+        if item_word in words:
             continue
 
-        length = len(itemWord)
-        items = [x.get("items") for x in groupedReplaceWords if length - 2 <= cast(int, x.get("key")) <= length + 2]
+        length = len(item_word)
+        items = [x.get("items") for x in grouped_replace_words if length - 2 <= cast(int, x.get("key")) <= length + 2]
         if not items:
             continue
 
-        allWordsToCheck: Any = reduce(lambda x, y: cast(str, x) + cast(str, y), items)
+        all_words_to_check: Any = reduce(lambda x, y: cast(str, x) + cast(str, y), items)
 
-        for w in allWordsToCheck:
-            if len(itemWord) < 4 and _levenshtein(itemWord, w) == 1:
-                item = item.replace(itemWord, w)
-            elif len(itemWord) >= 4 and 1 <= _levenshtein(itemWord, w) <= 2:
-                item = item.replace(itemWord, w)
+        for w in all_words_to_check:
+            if len(item_word) < 4 and _levenshtein(item_word, w) == 1:
+                item = item.replace(item_word, w)
+            elif len(item_word) >= 4 and 1 <= _levenshtein(item_word, w) <= 2:
+                item = item.replace(item_word, w)
 
     return item
 

@@ -6,11 +6,11 @@ with warnings.catch_warnings():
     from nltk.stem.snowball import SnowballStemmer
 
 
-langMapping = {"de": SnowballStemmer("german"), "en": SnowballStemmer("english")}
+lang_mapping = {"de": SnowballStemmer("german"), "en": SnowballStemmer("english")}
 
 
-def step(item: Any, itemState: Dict[str, Any], globalState: Optional[Dict[str, Any]], preprocessorData: str) -> Any:
-    stemmer = langMapping.get(itemState["language"], langMapping["en"])
+def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> Any:
+    stemmer = lang_mapping.get(item_state["language"], lang_mapping["en"])
 
     stemmed_words = [stemmer.stem(word) for word in item.split()]
 

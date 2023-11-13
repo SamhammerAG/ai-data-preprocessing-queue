@@ -5,11 +5,11 @@ from typing import Any, Dict, Optional
 import pandas
 
 
-def step(item: Any, itemState: Dict[str, Any], globalState: Optional[Dict[str, Any]], preprocessorData: str) -> Any:
-    if preprocessorData is None or not preprocessorData:
+def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> Any:
+    if preprocessor_data is None or not preprocessor_data:
         return item
 
-    csv = _get_data_from_store_or_reload(globalState, preprocessorData)
+    csv = _get_data_from_store_or_reload(global_state, preprocessor_data)
 
     for _, row in csv.iterrows():
         pattern = re.compile(row[0])
@@ -18,21 +18,21 @@ def step(item: Any, itemState: Dict[str, Any], globalState: Optional[Dict[str, A
     return item
 
 
-def _get_data_from_store_or_reload(globalState: Optional[Dict[str, Any]], preprocessorData: str) -> pandas.DataFrame:
-    if globalState is None:
-        return _prepare_pre_processor_data(preprocessorData)
+def _get_data_from_store_or_reload(global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> pandas.DataFrame:
+    if global_state is None:
+        return _prepare_pre_processor_data(preprocessor_data)
 
-    dictIdentifier = "regexReplacementPreprocessorData"
-    if dictIdentifier in globalState:
-        return globalState[dictIdentifier]
+    dict_identifier = "regexReplacementpreprocessor_data"
+    if dict_identifier in global_state:
+        return global_state[dict_identifier]
 
-    preparedData = _prepare_pre_processor_data(preprocessorData)
-    globalState[dictIdentifier] = preparedData
-    return preparedData
+    prepared_data = _prepare_pre_processor_data(preprocessor_data)
+    global_state[dict_identifier] = prepared_data
+    return prepared_data
 
 
-def _prepare_pre_processor_data(preprocessorData: str) -> pandas.DataFrame:
-    csv = pandas.read_csv(StringIO(preprocessorData), header=None, usecols=[0, 1, 2], quotechar='"', encoding="utf8")
+def _prepare_pre_processor_data(preprocessor_data: str) -> pandas.DataFrame:
+    csv = pandas.read_csv(StringIO(preprocessor_data), header=None, usecols=[0, 1, 2], quotechar='"', encoding="utf8")
 
     csv[0] = csv[0].str.strip()
     csv[1] = csv[1].str.strip()
