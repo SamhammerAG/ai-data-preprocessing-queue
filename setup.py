@@ -11,7 +11,7 @@ with open("requirements-dev.txt", "r") as fin:
 
 setuptools.setup(
     name="ai-data-preprocessing-queue",
-    version="1.4.0",
+    version="1.4.1",
     description="Can be used to pre process data before ai processing",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
