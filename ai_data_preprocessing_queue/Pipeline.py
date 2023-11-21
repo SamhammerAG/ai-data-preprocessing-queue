@@ -10,11 +10,11 @@ class Pipeline:
             processor = StepProcessor(step_name, step_dict.get(step_name))
             self.step_processors.append(processor)
 
-    def consume(self, item: Any, globalState: Optional[Dict[str, Any]] = None) -> Any:
-        retVal = item
+    def consume(self, item: Any, global_state: Optional[Dict[str, Any]] = None) -> Any:
+        ret_val = item
 
-        itemState: Dict[str, Any] = {}
+        item_state: Dict[str, Any] = {}
         for processor in self.step_processors:
-            retVal = processor.run(retVal, itemState, globalState)
+            ret_val = processor.run(ret_val, item_state, global_state)
 
-        return retVal
+        return ret_val

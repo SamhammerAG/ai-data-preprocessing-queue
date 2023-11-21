@@ -6,9 +6,9 @@ from . import Steps  # noqa: F401
 
 
 class StepProcessor:
-    def __init__(self, name: str, stepData: Optional[str]) -> None:
+    def __init__(self, name: str, step_data: Optional[str]) -> None:
         self.name: str = name
-        self.stepData: Optional[str] = stepData
+        self.step_data: Optional[str] = step_data
 
         package_name = f"{__package__}.Steps"
         module_name = f".{self.name}"
@@ -16,5 +16,5 @@ class StepProcessor:
 
         assert self.module.step is not None
 
-    def run(self, item: Any, itemState: Dict[str, Any], globalState: Optional[Dict[str, Any]] = None) -> Any:
-        return self.module.step(item, itemState, globalState, self.stepData or "")
+    def run(self, item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str, Any]] = None) -> Any:
+        return self.module.step(item, item_state, global_state, self.step_data or "")
