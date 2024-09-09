@@ -1,5 +1,5 @@
 import warnings
-from typing import Any, Dict, Optional
+from typing import Any
 
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -9,7 +9,7 @@ with warnings.catch_warnings():
 lang_mapping = {"de": SnowballStemmer("german"), "en": SnowballStemmer("english")}
 
 
-def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> Any:
+def step(item: Any, item_state: dict[str, Any], global_state: dict[str, Any] | None, preprocessor_data: str) -> Any:
     stemmer = lang_mapping.get(item_state["language"], lang_mapping["en"])
 
     stemmed_words = [stemmer.stem(word) for word in item.split()]

@@ -1,7 +1,7 @@
 import re
-from typing import Any, Dict, Optional
+from typing import Any
 
 
-def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> Any:
+def step(item: Any, item_state: dict[str, Any], global_state: dict[str, Any] | None, preprocessor_data: str) -> Any:
     item = re.sub(r"[^\w\s]", " ", item)
     return item

@@ -48,7 +48,7 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual("test text", value)
 
     def test_regex_replacement(self) -> None:
-        with open(path.join(ABS_PATH_TEST_DATA, "regex_replacement_testdata.csv"), "r") as handler:
+        with open(path.join(ABS_PATH_TEST_DATA, "regex_replacement_testdata.csv"), "r", encoding="utf-8") as handler:
             pipeline = Pipeline({"regex_replacement": handler.read()})
         # date
         value = pipeline.consume("test 1.1.2019 20.2.2003 1.1.20 01.01.20 1.1.1900 1.1. 01.01. test")
@@ -88,19 +88,19 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual("test text", value)
 
     def test_token_replacement(self) -> None:
-        with open(path.join(ABS_PATH_TEST_DATA, "token_replacement_testdata.csv"), "r") as handler:
+        with open(path.join(ABS_PATH_TEST_DATA, "token_replacement_testdata.csv"), "r", encoding="utf-8") as handler:
             pipeline = Pipeline({"token_replacement": handler.read()})
         value = pipeline.consume("test asd bla 1212")
         self.assertEqual("test www blub 1212", value)
 
     def test_token_replacement_do_not_replace_parts_of_word(self) -> None:
-        with open(path.join(ABS_PATH_TEST_DATA, "token_replacement_testdata.csv"), "r") as handler:
+        with open(path.join(ABS_PATH_TEST_DATA, "token_replacement_testdata.csv"), "r", encoding="utf-8") as handler:
             pipeline = Pipeline({"token_replacement": handler.read()})
         value = pipeline.consume("test abg. abgabgeschlossen 1212")
         self.assertEqual("test abgeschlossen abgabgeschlossen 1212", value)
 
     def test_token_replacement_also_replace_dots_at_end_of_phrase(self) -> None:
-        with open(path.join(ABS_PATH_TEST_DATA, "token_replacement_testdata.csv"), "r") as handler:
+        with open(path.join(ABS_PATH_TEST_DATA, "token_replacement_testdata.csv"), "r", encoding="utf-8") as handler:
             pipeline = Pipeline({"token_replacement": handler.read()})
         value = pipeline.consume("abg. 1212")
         self.assertEqual("abgeschlossen 1212", value)
