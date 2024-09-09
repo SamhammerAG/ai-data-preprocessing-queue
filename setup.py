@@ -30,7 +30,7 @@ setuptools.setup(
     keywords="text processing,ai",
     packages=setuptools.find_packages(exclude=["tests"]),
     package_data={"ai_data_preprocessing_queue": ["py.typed"]},
-    python_requires=">=3.8",
+    python_requires=">=3.12",
     install_requires=REQS,
     extras_require={"dev": REQS_DEV},
     project_urls={

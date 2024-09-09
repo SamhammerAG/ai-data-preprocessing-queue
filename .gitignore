@@ -40,3 +40,6 @@ dist/
 venv
 ai_data_preprocessing_queue.egg-info
 /lcov.info
+
+# poetry
+poetry.lock
