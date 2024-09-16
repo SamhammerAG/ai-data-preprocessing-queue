@@ -11,7 +11,7 @@ with open("requirements-dev.txt", "r") as fin:
 
 setuptools.setup(
     name="ai-data-preprocessing-queue",
-    version="1.4.1",
+    version="1.5.0",
     description="Can be used to pre process data before ai processing",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
@@ -30,7 +30,7 @@ setuptools.setup(
     keywords="text processing,ai",
     packages=setuptools.find_packages(exclude=["tests"]),
     package_data={"ai_data_preprocessing_queue": ["py.typed"]},
-    python_requires=">=3.8",
+    python_requires=">=3.12",
     install_requires=REQS,
     extras_require={"dev": REQS_DEV},
     project_urls={

@@ -1,10 +1,10 @@
 from functools import reduce
-from typing import Any, Dict, Optional, Set, cast
+from typing import Any, cast
 
 import numpy as np
 
 
-def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> Any:
+def step(item: Any, item_state: dict[str, Any], global_state: dict[str, Any] | None, preprocessor_data: str) -> Any:
     if preprocessor_data is None:
         return item
 
@@ -15,8 +15,8 @@ def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str,
 
     values = {len(w) for w in words}
     grouped_replace_words = [{"key": key, "items": list(filter(lambda x: len(x) == key, words))} for key in values]
-    all_item_words: Set[str] = set(item.split(" "))  # reduce all words
-    # all words with more than 4 can have distance 2, al other 1
+    all_item_words: set[str] = set(item.split(" "))  # reduce all words
+    # all words with more than 4 can have distance 2, all other 1
 
     for item_word in all_item_words:
         if item_word in words:

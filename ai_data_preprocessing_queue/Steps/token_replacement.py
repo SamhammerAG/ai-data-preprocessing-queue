@@ -1,9 +1,9 @@
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 # the higher the number the higher the prio
-def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> Any:
+def step(item: Any, item_state: dict[str, Any], global_state: dict[str, Any] | None, preprocessor_data: str) -> Any:
     if preprocessor_data is None or not preprocessor_data:
         return item
 
@@ -23,7 +23,7 @@ def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str,
     return item
 
 
-def _get_data_from_store_or_reload(global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> List[List[str]]:
+def _get_data_from_store_or_reload(global_state: dict[str, Any] | None, preprocessor_data: str) -> list[list[str]]:
     if global_state is None:
         return _prepare_pre_processor_data(preprocessor_data)
 
@@ -36,8 +36,8 @@ def _get_data_from_store_or_reload(global_state: Optional[Dict[str, Any]], prepr
     return prepared_data
 
 
-def _prepare_pre_processor_data(preprocessor_data: str) -> List[List[str]]:
-    lines: List[List[str]] = [
+def _prepare_pre_processor_data(preprocessor_data: str) -> list[list[str]]:
+    lines: list[list[str]] = [
         [s.strip() for i, s in enumerate(line.split(",")) if (i == 2 and re.compile(r"^[0-9\s]+$").match(s)) or i < 2]
         for line in preprocessor_data.splitlines()
         if line.count(",") == 2

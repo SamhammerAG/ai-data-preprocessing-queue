@@ -1,11 +1,11 @@
 import re
 from io import StringIO
-from typing import Any, Dict, Optional
+from typing import Any
 
 import pandas
 
 
-def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> Any:
+def step(item: Any, item_state: dict[str, Any], global_state: dict[str, Any] | None, preprocessor_data: str) -> Any:
     if preprocessor_data is None or not preprocessor_data:
         return item
 
@@ -18,7 +18,7 @@ def step(item: Any, item_state: Dict[str, Any], global_state: Optional[Dict[str,
     return item
 
 
-def _get_data_from_store_or_reload(global_state: Optional[Dict[str, Any]], preprocessor_data: str) -> pandas.DataFrame:
+def _get_data_from_store_or_reload(global_state: dict[str, Any] | None, preprocessor_data: str) -> pandas.DataFrame:
     if global_state is None:
         return _prepare_pre_processor_data(preprocessor_data)
 
