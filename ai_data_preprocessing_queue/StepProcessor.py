@@ -14,7 +14,8 @@ class StepProcessor:
         module_name = f".{self.name}"
         self.module = importlib.import_module(module_name, package_name)
 
-        assert self.module.step is not None
+        if self.module.step is None:  # pragma: no cover
+            raise AssertionError("self.module.step must not be None")
 
     def run(self, item: Any, item_state: dict[str, Any], global_state: dict[str, Any] | None = None) -> Any:
         return self.module.step(item, item_state, global_state, self.step_data or "")

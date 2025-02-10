@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ai-data-preprocessing-queue"
-version = "0.2.0"
+version = "1.6.0"
 description = "A collection of different text processing steps that can be enabled or disabled dynamically."
 authors = ["KI-Team"]
 license = "MIT"
@@ -14,15 +14,13 @@ pandas = "*"
 numpy = "*"
 
 [tool.poetry.group.dev.dependencies]
+coverage-lcov = "*"
 flake8-bandit = "*"
 flake8-pydocstyle = "*"
 mypy = "*"
 build = "*"
 pytest = "*"
-pytest-asyncio = "*"
 pytest-cov = "*"
-coverage-lcov = "*"
-mock = "*"
 types-mock = "*"
 
 [build-system]

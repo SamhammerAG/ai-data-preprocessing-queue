@@ -7,4 +7,5 @@ exclude =
     build,
     dist
 per-file-ignores =
-    __init__.py: F401
+    __init__.py: D100, D101, D102, D103, D104, D106, D107, F401
+    /*: D100, D101, D102, D103, D104, D106, D107

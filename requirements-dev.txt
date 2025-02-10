@@ -1,12 +1,9 @@
 -r requirements.txt
+coverage-lcov
+build
 flake8-bandit
 flake8-pydocstyle
 mypy
-build
-
 pytest
-pytest-asyncio
 pytest-cov
-coverage-lcov
-mock
-types-mock
+
