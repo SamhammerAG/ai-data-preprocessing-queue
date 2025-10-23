@@ -37,7 +37,7 @@ Note: Pipeline has to be instantiated only once and can be reused.
 ## Existing preprocessors
 
 ### To Lower Case
-Name: to_lower 
+Name: to_lower
 
 Required additional data: -
 
@@ -90,6 +90,12 @@ Required additional data: CSV data in string form with the following line format
   - order: the order in which the entries are supposed to be applied (largest number will be applied first!)
 
 With this preprocessor you can replace specific words and abbreviations within the text with specified tokens. It is also possible to replace abbreviations ending with a dot. Other special characters are not supported, though.
+
+### Remove signature
+Name: remove_signature
+
+Removes greeting expressions and everything following them, as well as thank you expressions.
+Should be used before the other processing steps.
 
 ## How to start developing
 
