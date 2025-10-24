@@ -8,19 +8,20 @@ from ai_data_preprocessing_queue.Steps.remove_signature import (
 
 class TestRemoveSignature(unittest.TestCase):
     @parameterized.expand([  # type: ignore[misc]
-        ("multiple_newlines",
+        (
+            "multiple_newlines",
             "Could you please review the attached document?\n\n\nI need your feedback by Friday.",
-            "Could you please review the attached document? I need your feedback by Friday."
+            "Could you please review the attached document? I need your feedback by Friday.",
         ),
         (
             "multiple_spaces",
             "The meeting    is scheduled    for 3PM    tomorrow.",
-            "The meeting is scheduled for 3PM tomorrow."
+            "The meeting is scheduled for 3PM tomorrow.",
         ),
         (
             "mixed_whitespace",
             "Please find the report attached.  \n\n  The numbers look good   \r\n\r\n   for Q3!",
-            "Please find the report attached. The numbers look good for Q3!"
+            "Please find the report attached. The numbers look good for Q3!",
         ),
         (
             "empty_string",
@@ -31,7 +32,7 @@ class TestRemoveSignature(unittest.TestCase):
             "trailing_whitespace",
             "I'll send the updated version tomorrow.   \n\n  ",
             "I'll send the updated version tomorrow."
-        ),
+        )
     ])
     def test_remove_newline(self, name: str, input_text: str, expected: str) -> None:
         self.assertEqual(remove_newline(input_text), expected)
@@ -81,12 +82,11 @@ class TestRemoveSignature(unittest.TestCase):
             "no_greetings",
             "This is a plain text without any greetings or signatures.",
             "This is a plain text without any greetings or signatures."
-        )
+        ),
     ])
     def test_remove_greetings_and_following_text(self, name: str, input_text: str, expected: str) -> None:
         self.assertEqual(remove_greetings_and_following_text(input_text), expected)
 
 
-if __name__ == '__main__':
-    unittest.main()
+if __name__ == "__main__":
     unittest.main()
