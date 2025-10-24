@@ -1,4 +1,5 @@
 import re
+from typing import Any
 
 
 def remove_newline(text: str) -> str:
@@ -40,7 +41,7 @@ THANK_EXPRESSIONS = [
 THANK_SUFFIXES = [
     r"(?:in advance(?: for (?:your|the) (?:help|support|understanding|assistance))?)",
     r"(?:for (?:your|the) (?:help|support|understanding|assistance))",
-    r"(?:schon mal )?(?:im voraus)?(?: für (?:ihre|ihr|eure|die|den) (?:hilfe|support|verständnis))?",
+    r"(?:schon mal\s+)?(?:im voraus\s+)?für\s+(?:ihre|ihr|eure|die|den)\s+(?:hilfe|support|verständnis)",
     r"vorab",
     r"kindly?"
 ]
@@ -68,11 +69,11 @@ def remove_single_greeting_words(text: str, pattern: str) -> str:
     return re.sub(pattern, " ", text, flags=re.IGNORECASE | re.UNICODE)
 
 
-def step(text: str) -> str:
-    if not text:
-        return text
+def step(item: Any, item_state: dict[str, Any], global_state: dict[str, Any] | None, preprocessor_data: str) -> Any:
+    if not item:
+        return item
     try:
-        text_greetings_removed = remove_greetings_and_following_text(text)
+        text_greetings_removed = remove_greetings_and_following_text(item)
         thankyou_removed = remove_thanking_expressions(text_greetings_removed)
         single_greetings_removed = remove_single_greeting_words(thankyou_removed, single_greetings_pattern)
 

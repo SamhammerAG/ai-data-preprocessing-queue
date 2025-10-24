@@ -2,6 +2,7 @@ import unittest
 
 from parameterized import parameterized
 
+from ai_data_preprocessing_queue.Pipeline import Pipeline
 from ai_data_preprocessing_queue.Steps.remove_signature import (
     remove_greetings_and_following_text, remove_newline)
 
@@ -86,6 +87,46 @@ class TestRemoveSignature(unittest.TestCase):
     ])
     def test_remove_greetings_and_following_text(self, name: str, input_text: str, expected: str) -> None:
         self.assertEqual(remove_greetings_and_following_text(input_text), expected)
+
+    @parameterized.expand([  # type: ignore[misc]
+        (
+            "remove_signature_basic",
+            "We're sending the final draft for review. Best regards, Alice Johnson\nProject Lead",
+            "We're sending the final draft for review.",
+        ),
+        (
+            "thanking_at_start",
+            "Thank you very much for your support. "
+            "I will prepare the contract and send it tomorrow.\n\nBest regards, Bob Brown",
+            "I will prepare the contract and send it tomorrow.",
+        ),
+        (
+            "thanking_in_middle",
+            "Thank you very much for your support. "
+            "I appreciate your support on this migration. Thanks a lot, I will share the logs shortly.",
+            "I appreciate your support on this migration. I will share the logs shortly.",
+        ),
+        (
+            "single_greeting_word_german",
+            "The deliverables are ready. Grüße",
+            "The deliverables are ready.",
+        ),
+        (
+            "german_empty_result",
+            "Vielen Dank für Ihre Hilfe. Mit freundlichen Grüßen, Lena Meyer "
+            "Und hier kommt noch mehr Text.",
+            "",
+        ),
+        (
+            "no_change",
+            "Please schedule the kickoff meeting for next Tuesday morning at 10:00.",
+            "Please schedule the kickoff meeting for next Tuesday morning at 10:00.",
+        ),
+    ])
+    def test_remove_signature_parameterized(self, name: str, input_text: str, expected: str) -> None:
+        pipeline = Pipeline({"remove_signature": None})
+        value = pipeline.consume(input_text)
+        self.assertEqual(expected, value)
 
 
 if __name__ == "__main__":
