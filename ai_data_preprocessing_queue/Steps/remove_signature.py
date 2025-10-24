@@ -19,7 +19,7 @@ greetings_regex = r"(" + "|".join(GreetingExpressions) + r")\s*,?\s*"
 
 def remove_greetings_and_following_text(text: str) -> str:
     pattern = greetings_regex + ".*"
-    return re.sub(pattern, "", text, flags=re.IGNORECASE | re.UNICODE)
+    return re.sub(pattern, "", text, flags=re.IGNORECASE | re.UNICODE | re.DOTALL).strip()
 
 
 # thank you expressions should be removed after greetings and following signature text,
