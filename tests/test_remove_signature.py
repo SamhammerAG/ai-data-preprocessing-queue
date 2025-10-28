@@ -1,10 +1,10 @@
 import unittest
 
 from parameterized import parameterized
-
+from unittest.mock import MagicMock, patch
 from ai_data_preprocessing_queue.Pipeline import Pipeline
 from ai_data_preprocessing_queue.Steps.remove_signature import (
-    remove_greetings_and_following_text, remove_newline)
+    step, remove_greetings_and_following_text, remove_newline)
 
 
 class TestRemoveSignature(unittest.TestCase):
@@ -95,6 +95,16 @@ class TestRemoveSignature(unittest.TestCase):
             "We're sending the final draft for review.",
         ),
         (
+            "remove_signature_extended",
+            "Order Mice/keyboard\nGoodmorning, Can you please order the following: 10 x Dell Laser Mouse IL3220 "
+            "10 x Dell Business Keyboard AB322 (UK layout) Thx Best regards Jimmy B. "
+            "| C Facilities & Reception Klaus+Andreas Nederland | Anonymstraat 47 | 1234 AJ Amsterdam | Netherlands "
+            "Phone: +01 23 695 4567 | Mobile: +97 65 445 1234 | Fax: +31 35 695 8825 jim.anonymus@company.com "
+            "| www.nl.somecompany.com",
+            "Order Mice/keyboard Goodmorning, Can you please order the following: 10 x Dell Laser Mouse IL3220 "
+            "10 x Dell Business Keyboard AB322 (UK layout) Thx",
+        ),
+        (
             "thanking_at_start",
             "Thank you very much for your support. "
             "I will prepare the contract and send it tomorrow.\n\nBest regards, Bob Brown",
@@ -123,10 +133,20 @@ class TestRemoveSignature(unittest.TestCase):
             "Please schedule the kickoff meeting for next Tuesday morning at 10:00.",
         ),
     ])
-    def test_remove_signature_parameterized(self, name: str, input_text: str, expected: str) -> None:
+    def test_remove_signature(self, name: str, input_text: str, expected: str) -> None:
         pipeline = Pipeline({"remove_signature": None})
         value = pipeline.consume(input_text)
         self.assertEqual(expected, value)
+
+    def test_remove_signature_step_empty_item(self) -> None:
+        result = step("", {}, None, "")
+        self.assertEqual(result, "")
+
+    @patch("ai_data_preprocessing_queue.Steps.remove_signature.remove_greetings_and_following_text",
+           side_effect=Exception("Test error"))
+    def test_remove_signature_step_error(self, _: MagicMock) -> None:
+        with self.assertRaises(Exception):
+            step("Please schedule the kickoff meeting for next Tuesday morning at 10:00.", {}, None, "")
 
 
 if __name__ == "__main__":
