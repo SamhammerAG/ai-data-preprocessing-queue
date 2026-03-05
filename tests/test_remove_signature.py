@@ -1,14 +1,15 @@
 import unittest
+from unittest.mock import MagicMock, patch
 
 from parameterized import parameterized
-from unittest.mock import MagicMock, patch
+
 from ai_data_preprocessing_queue.Pipeline import Pipeline
 from ai_data_preprocessing_queue.Steps.remove_signature import (
-    step, remove_greetings_and_following_text, remove_newline)
+    remove_greetings_and_following_text, remove_newline, step)
 
 
 class TestRemoveSignature(unittest.TestCase):
-    @parameterized.expand([  # type: ignore[misc]
+    @parameterized.expand([  # type: ignore[untyped-decorator]
         (
             "multiple_newlines",
             "Could you please review the attached document?\n\n\nI need your feedback by Friday.",
@@ -38,7 +39,7 @@ class TestRemoveSignature(unittest.TestCase):
     def test_remove_newline(self, name: str, input_text: str, expected: str) -> None:
         self.assertEqual(remove_newline(input_text), expected)
 
-    @parameterized.expand([  # type: ignore[misc]
+    @parameterized.expand([  # type: ignore[untyped-decorator]
         (
             "english_signature_basic",
             "Here's the project update. Sincerely, John Smith\nProject Manager",
@@ -88,7 +89,7 @@ class TestRemoveSignature(unittest.TestCase):
     def test_remove_greetings_and_following_text(self, name: str, input_text: str, expected: str) -> None:
         self.assertEqual(remove_greetings_and_following_text(input_text), expected)
 
-    @parameterized.expand([  # type: ignore[misc]
+    @parameterized.expand([  # type: ignore[untyped-decorator]
         (
             "remove_signature_basic",
             "We're sending the final draft for review. Best regards, Alice Johnson\nProject Lead",
@@ -150,4 +151,5 @@ class TestRemoveSignature(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    unittest.main()
     unittest.main()
