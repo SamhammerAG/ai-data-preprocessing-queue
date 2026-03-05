@@ -83,7 +83,7 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual("test  password  test", value)
 
     def test_token_replacement_do_not_crash_for_no_data(self) -> None:
-        pipeline = Pipeline({"token_replacement": None})
+        pipeline = Pipeline({"token_replacement": None})  # noqa: S105
         value = pipeline.consume("test text")
         self.assertEqual("test text", value)
 
