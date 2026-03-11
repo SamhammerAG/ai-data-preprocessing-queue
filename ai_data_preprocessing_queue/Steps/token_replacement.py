@@ -15,7 +15,7 @@ def step(item: Any, item_state: dict[str, Any], global_state: dict[str, Any] | N
 
         # also replace dots at end of word
         if not line[0].endswith("."):
-            regex = regex + "\\b"
+            regex += "\\b"
 
         pattern = re.compile(regex)
         item = pattern.sub(line[1], item)
@@ -38,18 +38,16 @@ def _get_data_from_store_or_reload(global_state: dict[str, Any] | None, preproce
 
 def _prepare_pre_processor_data(preprocessor_data: str) -> list[list[str]]:
     lines: list[list[str]] = [
-        [s.strip() for i, s in enumerate(line.split(",")) if (i == 2 and re.compile(r"^[0-9\s]+$").match(s)) or i < 2]
+        [s.strip() for i, s in enumerate(line.split(",")) if (i == 2 and re.compile(r"^[0-9\s]+$").match(s)) or i < 2]  # noqa: PLR2004
         for line in preprocessor_data.splitlines()
-        if line.count(",") == 2
+        if line.count(",") == 2  # noqa: PLR2004
     ]
-    lines = [line for line in lines if len(line) == 3]
+    lines = [line for line in lines if len(line) == 3]  # noqa: PLR2004
 
     i: int = 0
     while i < len(lines):
         lines[i][2] = int(lines[i][2])  # type: ignore
         i += 1
 
-    # sort
-    lines = sorted(lines, key=lambda f: 0 - f[2])  # type: ignore
-
-    return lines
+    # sort and return
+    return sorted(lines, key=lambda f: 0 - f[2])  # type: ignore
