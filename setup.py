@@ -1,17 +1,17 @@
 import setuptools
 
-with open("README.md", "r") as fh:
+with open("README.md", encoding="utf-8") as fh:
     LONG_DESCRIPTION = fh.read()
 
-with open("requirements.txt", "r") as fin:
+with open("requirements.txt", encoding="utf-8") as fin:
     REQS = fin.read().splitlines()
 
-with open("requirements-dev.txt", "r") as fin:
+with open("requirements-dev.txt", encoding="utf-8") as fin:
     REQS_DEV = [item for item in fin.read().splitlines() if not item.endswith(".txt")]
 
 setuptools.setup(
     name="ai-data-preprocessing-queue",
-    version="1.7.1",
+    version="1.7.2",
     description="Can be used to pre process data before ai processing",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",

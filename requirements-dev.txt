@@ -1,10 +1,9 @@
 -r requirements.txt
 coverage-lcov
 build
-flake8-bandit
-flake8-pydocstyle
 mypy
 parameterized
 pytest
 pytest-cov
+ruff
 

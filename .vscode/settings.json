@@ -9,13 +9,11 @@
     "files.trimTrailingWhitespace": true,
     "files.exclude": {
         ".coverage": true,
-        ".flake8": true,
         ".gitattributes": true,
         ".gitignore": true,
         ".idea": true,
         ".mypy_cache": true,
         ".mypy.ini": true,
-        ".pylintrc": true,
         "*.egg-info": true,
         "**/__pycache__": true,
         "**/.pytest_cache": true,
@@ -29,8 +27,8 @@
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
     "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff"
     },
     "python.analysis.diagnosticSeverityOverrides": {
         "reportPrivateUsage": "information",
