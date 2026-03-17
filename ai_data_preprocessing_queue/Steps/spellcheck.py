@@ -30,9 +30,12 @@ def step(item: Any, item_state: dict[str, Any], global_state: dict[str, Any] | N
         all_words_to_check: Any = reduce(lambda x, y: cast(str, x) + cast(str, y), items)
 
         for w in all_words_to_check:
-            if len(item_word) < 4 and _levenshtein(item_word, w) == 1:
-                item = item.replace(item_word, w)
-            elif len(item_word) >= 4 and 1 <= _levenshtein(item_word, w) <= 2:
+            if (
+                len(item_word) < 4  # noqa: PLR2004
+                and _levenshtein(item_word, w) == 1
+                or len(item_word) >= 4  # noqa: PLR2004
+                and 1 <= _levenshtein(item_word, w) <= 2  # noqa: PLR2004
+            ):
                 item = item.replace(item_word, w)
 
     return item

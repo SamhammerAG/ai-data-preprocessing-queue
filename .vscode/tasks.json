@@ -14,7 +14,17 @@
         {
             "label": "Lint",
             "type": "shell",
-            "command": "flake8 . --count --statistics; mypy .",
+            "command": "ruff check; mypy .",
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Format all",
+            "type": "shell",
+            "command": "ruff format",
             "group": "test",
             "presentation": {
                 "reveal": "always",

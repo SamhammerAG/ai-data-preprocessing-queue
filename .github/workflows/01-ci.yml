@@ -1,0 +1,80 @@
+name: 01 | ai-data-preprocessing-queue | continuous integration
+run-name: State ${{ github.ref }}
+on:
+  push:
+    branches:
+      - "**"
+    paths-ignore:
+      - README.md
+      - LICENSE.txt
+      - .gitignore
+      - .vscode/**
+      - .devcontainer/**
+
+jobs:
+  changes:
+    name: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    outputs:
+      ai_data_preprocessingqueue: ${{ steps.filter.outputs.ai_data_preprocessing_queue }}
+      first_run: ${{ steps.first_run.outputs.first_run }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: SamhammerAG/first-build-action@v2.1
+        id: first_run
+        with:
+          workflow: 01 | ai-data-preprocessing-queue | continuous integration
+          branch: ${{ github.ref_name }}
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: ${{ github.ref }}
+          filters: |
+            ai-data-preprocessing-queue:
+              - '.github/workflows/01-ci.yml'
+              - 'ai-data-preprocessing-queue/**'
+
+  build_python:
+    name: Python | build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - name: preparation | Add linting matchers
+        run: |
+          echo "::add-matcher::.github/mypy-error-problem-matcher.json"
+      - name: preparation | upgrade pip
+        if: needs.changes.outputs.ai_data_preprocessing_queue == 'true' || needs.changes.outputs.first_run == 'true'
+        run: python -m pip install --upgrade pip
+      - name: ai-data-preprocessing-queue | Install dependencies
+        if: needs.changes.outputs.ai_data_preprocessing_queue == 'true' || needs.changes.outputs.first_run == 'true'
+        run: pip install -r requirements-dev.txt
+      - name: preparation | Create failures dir
+        run: mkdir -p ./ruff_failures
+      - name: ai-data-preprocessing-queue  | ruff check
+        if: needs.changes.outputs.ai_data_preprocessing_queue == 'true' || needs.changes.outputs.first_run == 'true'
+        run: |
+          ruff check --output-format github . || echo "ai_data_preprocessing_queue" >> ./ruff_failures/ruff_failures.txt
+      - name: ai-data-preprocessing-queue | Lint typing
+        if: needs.changes.outputs.ai_data_preprocessing_queue == 'true' || needs.changes.outputs.first_run == 'true'
+        # Must run with installed dependencies
+        # Must be executed from root with path to project as param because
+        # the problem matcher needs an absolute path in error message to work correctly
+        working-directory: ./
+        run: |
+          mypy --config-file .mypy.ini --show-column-numbers ai-data-preprocessing-queue
+      - name: Test ai-data-preprocessing-queue
+        if: needs.changes.outputs.ai_data_preprocessing_queue == 'true' || needs.changes.outputs.first_run == 'true'
+        working-directory: ai-data-preprocessing-queue
+        run: pytest --cov app --cov-report=xml tests
+      - name: ai-data-preprocessing-queue | Report coverage
+        if: needs.changes.outputs.ai_data_preprocessing_queue == 'true' || needs.changes.outputs.first_run == 'true'
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          title: Test coverage for changes on ai-data-preprocessing-queue
+          pytest-xml-coverage-path: ai-data-preprocessing-queue/coverage.xml
+          report-only-changed-files: true
